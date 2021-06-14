@@ -25,9 +25,9 @@ app.get('/data/get/:name', (req, res, next) => {
 
 
 
-function new_player(pid, pname) {
-    db.run("insert into players(id,name)values($id,$name)",
-        { $id: pid, $name: pname },
+function new_player(pid, pname, pinfo) {
+    db.run("insert into players(id,name,info)values($id,$name,$info)",
+        { $id: pid, $name: pname, $info: pinfo },
         (err, res) => {
             if (res) return true;
             if (err) return false;
@@ -36,22 +36,17 @@ function new_player(pid, pname) {
 }
 
 
-app.get('/data/new/:name', (req, res) => {
+app.get('/data/new/:name?:info', (req, res) => {
     const _query_name = req.params.name;
-    let highest_id = 0;
-    db.get("select id from players order by id desc limit 1", (err, rows) => {
-        if (rows) {
-            let new_id = rows.id + 1;
-            new_player(new_id, _query_name)
+    const info = req.params.info
+    let new_id = rows.id + 1;
+    new_player(new_id, _query_name, info)
 
-            if (new_player) {
-                res.json({ status: 'SUCCESS' })
-            } else {
-                res.json({ status: "ERROR" })
-            }
-
-        }
-    })
+    if (new_player) {
+        res.json({ status: 'SUCCESS', user: _query_name.toUpperCase() })
+    } else {
+        res.json({ status: "ERROR", user: _query_name.toUpperCase() })
+    }
 
 })
 
