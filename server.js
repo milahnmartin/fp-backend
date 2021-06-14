@@ -26,7 +26,7 @@ app.get('/data/get/:name', (req, res, next) => {
 
 
 function new_player(pname, pinfo) {
-    db.run("insert into users(id,name,info)values($name,$info)",
+    db.run("insert into `users`(name,info)values($name,$info)",
         { $name: pname, $info: pinfo },
         (err, res) => {
             if (res) return true;
