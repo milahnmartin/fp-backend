@@ -25,9 +25,9 @@ app.get('/data/get/:name', (req, res, next) => {
 
 
 
-function new_player(pid, pname, pinfo) {
-    db.run("insert into players(id,name,info)values($id,$name,$info)",
-        { $id: pid, $name: pname, $info: pinfo },
+function new_player(pname, pinfo) {
+    db.run("insert into players(id,name,info)values($name,$info)",
+        { $name: pname, $info: pinfo },
         (err, res) => {
             if (res) return true;
             if (err) return false;
@@ -40,7 +40,7 @@ app.post('/data/new/:name/', (req, res) => {
     const _query_name = req.params.name;
     const info = req.query.data
 
-    new_player(new_id, _query_name, info)
+    new_player(_query_name, info)
 
     if (new_player) {
         res.json({ status: 'SUCCESS', user: _query_name.toUpperCase() })
