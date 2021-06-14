@@ -36,7 +36,7 @@ function new_player(pname, pinfo) {
 }
 
 
-app.post('/data/new/:name/', (req, res) => {
+app.get('/data/new/:name/', (req, res) => {
     const _query_name = req.params.name;
     const info = req.query.data
 
