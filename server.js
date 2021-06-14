@@ -11,7 +11,7 @@ db.run("CREATE TABLE IF NOT EXISTS `users`(`id` INTEGER PRIMARY KEY AUTOINCREMEN
 app.get('/data/get/:name', (req, res, next) => {
     const query = req.params.name;
 
-    db.all(`SELECT * FROM players where name like '${query}%'`, (err, rows) => {
+    db.all(`SELECT * FROM users where name like '${query}%'`, (err, rows) => {
         if (rows) {
             res.json(rows)
         } else {
