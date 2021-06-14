@@ -36,10 +36,10 @@ function new_player(pid, pname, pinfo) {
 }
 
 
-app.get('/data/new/:name?:info', (req, res) => {
+app.post('/data/new/:name/', (req, res) => {
     const _query_name = req.params.name;
-    const info = req.params.info
-    let new_id = rows.id + 1;
+    const info = req.query.data
+
     new_player(new_id, _query_name, info)
 
     if (new_player) {
