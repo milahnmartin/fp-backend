@@ -12,7 +12,7 @@ app.get('/data/get/:name', (req, res, next) => {
     const query = req.params.name;
 
     db.all(`SELECT * FROM users where name like '${query}%'`, (err, rows) => {
-        if (rows) {
+        if (rows[0]) {
             res.json(rows)
         } else {
             res.json({ status: "error" })
