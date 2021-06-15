@@ -1,3 +1,4 @@
+const { query } = require('express');
 const express = require('express');
 const app = express();
 const PORT = 3001;
@@ -36,6 +37,14 @@ function new_player(pname, pinfo) {
 }
 
 
+function remove_player(pname) {
+    db.run(`DELETE from users WHERE name LIKE '%${pname}%'`, (err, res) => {
+        if (res) return true;
+        if (!res) return false;
+    })
+}
+
+
 app.get('/data/new/:name/', (req, res) => {
     const _query_name = req.params.name;
     const info = req.query.data
@@ -52,13 +61,15 @@ app.get('/data/new/:name/', (req, res) => {
 
 app.get('/data/remove/:name', (req, res) => {
     const query_name = req.params.name;
-    db.run("DELETE * FROM `users` WHERE `name` LIKE '%$name%';", { $name: query_name }, (err, rows) => {
-        if (rows) {
-            res.json({ "STATUS": "SUCCESS", "USER": query_name.toUpperCase() })
-        } else {
-            res.json({ "STATUS": "ERROR", "USER": query_name.toUpperCase() })
-        }
-    })
+
+    remove_player(query_name)
+
+    if (remove_player) {
+        res.json({ "STATUS": "SUCCESS" })
+    } else {
+        res.json({ "STATUS": "ERROR" })
+    }
+
 })
 app.listen(PORT, (err, res) => {
     console.log("SERVER RUNNING ON " + PORT)
