@@ -52,9 +52,12 @@ app.get('/data/new/:name/', (req, res) => {
 
 app.get('/data/remove/:name', (req, res) => {
     const query_name = req.params.name;
-    db.run("DELETE * FROM `users` WHERE `name` = $name", { $name: query_name }, (err, res) => {
-        if (res) res.json({ "DELETE": "SUCCES", "USER": query_name.toUpperCase() })
-        if (err) res.json({ "DELETE": "ERROR", "USER": query_name.toUpperCase() })
+    db.run("DELETE * FROM `users` WHERE `name` LIKE $name", { $name: query_name }, (err, rows) => {
+        if (rows) {
+            res.json({ "STATUS": "SUCCESS", "USER": query_name.toUpperCase() })
+        } else {
+            res.json({ "STATUS": "ERROR", "USER": query_name.toUpperCase() })
+        }
     })
 })
 app.listen(PORT, (err, res) => {
