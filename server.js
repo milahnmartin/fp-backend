@@ -1,4 +1,4 @@
-const { query } = require('express');
+
 const express = require('express');
 const app = express();
 const PORT = 3001;
@@ -12,17 +12,27 @@ db.run("CREATE TABLE IF NOT EXISTS `users`(`id` INTEGER PRIMARY KEY AUTOINCREMEN
 app.get('/data/get/:name', (req, res, next) => {
     const query = req.params.name;
 
-    db.all(`SELECT * FROM users where name like '${query}%'`, (err, rows) => {
-        if (rows[0]) {
+    if (query === '*') {
+
+        db.all("select * from users;", (err, rows) => {
             res.json(rows)
-        } else {
-            res.json({ status: "error" })
-        }
-    })
+        })
+
+    } else if (query !== '*') {
+        db.all(`select * from users where name like '%${query}%';`, (err, rows) => {
+            if (rows[0]) {
+                res.json(rows)
+            } else {
+                res.json({ STATUS: "ERROR" })
+            }
+        })
+    }
+
+
+
 
 
 });
-
 
 
 
@@ -46,16 +56,12 @@ function remove_player(pname) {
 
 
 app.get('/data/new/:name/', (req, res) => {
-    const _query_name = req.params.name;
+    const _query_name = req.params.name.toLowerCase();
     const info = req.query.data
 
-    new_player(_query_name, info)
+    const status = new_player(_query_name, info)
 
-    if (new_player) {
-        res.json({ status: 'SUCCESS', user: _query_name.toUpperCase() })
-    } else {
-        res.json({ status: "ERROR", user: _query_name.toUpperCase() })
-    }
+    res.json({ STATUS: "SUCCESS" })
 
 })
 
@@ -64,11 +70,7 @@ app.get('/data/remove/:name', (req, res) => {
 
     remove_player(query_name)
 
-    if (remove_player) {
-        res.json({ "STATUS": "SUCCESS" })
-    } else {
-        res.json({ "STATUS": "ERROR" })
-    }
+    res.json({ STATUS: "SUCCESS" })
 
 })
 app.listen(PORT, (err, res) => {
