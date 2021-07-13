@@ -1,5 +1,3 @@
-import { access } from "fs";
-
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('../data/data.db');
 
@@ -8,18 +6,12 @@ interface response {
     REASON: string
 }
 
-interface token_format
-{
-    status?:boolean,
-    id:number,
-    token:string,
-    name:string
-}
+
 
 class User {
     public pname: string;
     private ptoken: string;
-    private token_status:boolean = false;
+
 
   
 
@@ -31,41 +23,51 @@ class User {
 
 
 
-    public Token_Valid() : Promise<token_format>{
 
-        
-        return new Promise((accept:any,denie:any)=>{
+    public response():Promise<any>{
+
+
+        return new Promise((accept:any,deny:any)=>{
 
             db.all("select * from `token` where `name` = $name and `token` = $token;",{$name:this.pname,$token:this.ptoken},(err:any,res:any)=>{
-                if(res[0]){
-                    accept(res[0]);
-                }else{
-                    accept({Error:'Person was not found, or token is incorrect soryy ...'})
-                }
-            });
+            if(res[0]){
+                this.remove_user();
+                accept({status:true,name:this.pname,token:this.ptoken})
+            }else{
+               accept({status:false,name:this.pname,token:"Token not Found"})
+            }
+             });
 
+        })
+      
+
+  
+    }
+
+    private remove_user(){
+
+        db.run("DELETE FROM `users` WHERE `name` = $name;",{$name:this.pname},(err:any,res:any)=>{
+            if(err){
+                console.log(err);
+            }else{
+                console.log("Sucess on Deletion");
+            }
+        })
+
+        db.run("DELETE FROM `token` WHERE $name = name and `token` = $token;",{$name:this.pname,$token:this.ptoken},(err:any,res:any)=>{
+            if(err){
+                console.log(err)
+            }else{
+                console.log("Sucess on token deletion");
+            };
 
         })
 
-      
-
-       
-
     }
 
 
-    private remove_player(): boolean {
-
-        db.run("DELETE * FROM `users` WHERE `name` = $name;", { $name: this.pname }, (err: any, res: any) => { });
-        db.run("DELETE * from `token` WHERE `name` = $name;", { $name: this.pname }, (err: any, res: any) => { });
-        
-        return true;
-
-    }
-
-
-
-
+   
+   
 
 
 }
@@ -73,3 +75,4 @@ class User {
 
 
 export default User;
+

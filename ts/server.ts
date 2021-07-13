@@ -105,15 +105,18 @@ app.get('/data/remove/:name', async (req: any, res: any) => {
     const token = req.query.token;
 
     let current_user = new User(query_name, token);
-    let my_response = await current_user.Token_Valid()
-    console.log(my_response)
+    let status = await current_user.response();
+
+    if(status){
+        if(status.status){
+            res.status(200).json({status:"Succesfull",name:status.name,token:status.token});
+        }else{
+            res.status(200).json({status:"Unsuccesfull",name:status.name,token:"Token Doesn't Exist or is wrong"})
+        }
+    }
+
     
-   if(my_response){
-       res.json(my_response);
-   }else{
-       res.json("Some Weird Shit just happened NGL")
-   }
-    
+
 
 
 
@@ -122,10 +125,4 @@ app.get('/data/remove/:name', async (req: any, res: any) => {
 app.listen(PORT, (err: any, res: any): void => {
     console.log("SERVER RUNNING ON " + PORT);
 })
-
-
-
-
-
-
 

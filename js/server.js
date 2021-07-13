@@ -76,13 +76,14 @@ app.get('/data/remove/:name', (req, res) => __awaiter(void 0, void 0, void 0, fu
     const query_name = req.params.name;
     const token = req.query.token;
     let current_user = new removing_1.default(query_name, token);
-    let my_response = yield current_user.Token_Valid();
-    console.log(my_response);
-    if (my_response) {
-        res.json(my_response);
-    }
-    else {
-        res.json("Some Weird Shit just happened NGL");
+    let status = yield current_user.response();
+    if (status) {
+        if (status.status) {
+            res.status(200).json({ status: "Succesfull", name: status.name, token: status.token });
+        }
+        else {
+            res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token Doesn't Exist or is wrong" });
+        }
     }
 }));
 app.listen(PORT, (err, res) => {
