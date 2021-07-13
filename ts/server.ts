@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const PORT = 3001;
 import User from './removing';
+import {new_status} from './types';
 
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('../data/data.db');
@@ -50,11 +51,7 @@ const generateToken = (): string => {
 
 
 
-interface new_status {
-    status: boolean,
-    secret_token?: string
 
-}
 
 
 

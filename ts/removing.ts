@@ -1,12 +1,6 @@
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('../data/data.db');
-
-interface response {
-    STATUS: boolean,
-    REASON: string
-}
-
-
+import {response} from './types';
 
 class User {
     public pname: string;
@@ -56,7 +50,7 @@ class User {
 
         db.run("DELETE FROM `token` WHERE $name = name and `token` = $token;",{$name:this.pname,$token:this.ptoken},(err:any,res:any)=>{
             if(err){
-                console.log(err)
+                console.log(err);
             }else{
                 console.log("Sucess on token deletion");
             };
