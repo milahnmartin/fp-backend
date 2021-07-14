@@ -3,7 +3,8 @@ const express = require('express');
 const app = express();
 const PORT = 3001;
 import User from './removing';
-import {new_status} from './types';
+import Update from './updating';
+import { new_status } from './types';
 
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('../data/data.db');
@@ -104,21 +105,43 @@ app.get('/data/remove/:name', async (req: any, res: any) => {
     let current_user = new User(query_name, token);
     let status = await current_user.response();
 
-    if(status){
-        if(status.status){
-            res.status(200).json({status:"Succesfull",name:status.name,token:status.token});
-        }else{
-            res.status(200).json({status:"Unsuccesfull",name:status.name,token:"Token Doesn't Exist or is wrong"})
+    if (status) {
+        if (status.status) {
+            res.status(200).json({ status: "Succesfull", name: status.name, token: status.token });
+        } else {
+            res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token Doesn't Exist or is wrong" })
         }
     }
 
-    
+})
 
 
 
 
+
+app.get('/data/update/:name/:token/:info', async (req: any, res: any) => {
+
+    const _name = req.params.name;
+    const _token = req.params.token;
+    const _info = req.params.info;
+
+    let _user = new Update(_name, _token, _info);
+    let token_response = await _user.checkUser();
+
+    res.status(200).json(token_response);
 
 })
+
+
+
+
+
+
+
+
+
+
+
 app.listen(PORT, (err: any, res: any): void => {
     console.log("SERVER RUNNING ON " + PORT);
 })

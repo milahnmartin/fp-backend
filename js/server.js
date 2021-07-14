@@ -16,6 +16,7 @@ const express = require('express');
 const app = express();
 const PORT = 3001;
 const removing_1 = __importDefault(require("./removing"));
+const updating_1 = __importDefault(require("./updating"));
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('../data/data.db');
 db.run("CREATE TABLE IF NOT EXISTS `users`(`id` INTEGER PRIMARY KEY AUTOINCREMENT,`name` TEXT,`info` BLOB default NULL);");
@@ -85,6 +86,14 @@ app.get('/data/remove/:name', (req, res) => __awaiter(void 0, void 0, void 0, fu
             res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token Doesn't Exist or is wrong" });
         }
     }
+}));
+app.get('/data/update/:name/:token/:info', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const _name = req.params.name;
+    const _token = req.params.token;
+    const _info = req.params.info;
+    let _user = new updating_1.default(_name, _token, _info);
+    let token_response = yield _user.checkUser();
+    res.status(200).json(token_response);
 }));
 app.listen(PORT, (err, res) => {
     console.log("SERVER RUNNING ON " + PORT);

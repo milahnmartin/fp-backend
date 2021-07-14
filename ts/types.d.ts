@@ -8,3 +8,11 @@ export interface new_status {
     secret_token?: string
 
 }
+
+
+export interface update_status {
+    status: boolean,
+    reason?: string,
+    token?: string,
+    name: string
+}
