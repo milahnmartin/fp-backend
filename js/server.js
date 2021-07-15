@@ -83,7 +83,7 @@ app.get('/data/remove/:name', (req, res) => __awaiter(void 0, void 0, void 0, fu
             res.status(200).json({ status: "Succesfull", name: status.name, token: status.token });
         }
         else {
-            res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token Doesn't Exist or is wrong" });
+            res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token Doesn't Exist or is wrong", response: "deleted" });
         }
     }
 }));

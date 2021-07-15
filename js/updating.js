@@ -12,11 +12,10 @@ class Update {
         return new Promise((accept, deny) => {
             db.all("select `token` from `token` where `token` = $token;", { $token: this._token }, (err, res) => {
                 if (res[0]) {
-                    this.update_user({ status: true, reason: "Success", token: this._token, name: this._name });
-                    accept({ status: true, reason: "Success", token: this._token, name: this._name });
+                    accept(this.update_user({ status: true, reason: "Success", token: this._token, name: this._name }));
                 }
                 else {
-                    accept({ status: false, reason: "Errror Occured", name: this._name });
+                    accept(this.update_user({ status: false, reason: "error", name: this._name }));
                 }
             });
         });
@@ -24,6 +23,10 @@ class Update {
     update_user(info) {
         if (info.status) {
             db.run("update `users` set `info` = $info where `name` = $name", { $info: this._info, $name: this._name }, (err, res) => { });
+            return info;
+        }
+        else {
+            return info;
         }
     }
 }

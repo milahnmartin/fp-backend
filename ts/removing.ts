@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('../data/data.db');
-import {response} from './types';
+import {new_status, response} from './types';
 
 class User {
     public pname: string;
@@ -25,10 +25,10 @@ class User {
 
             db.all("select * from `token` where `name` = $name and `token` = $token;",{$name:this.pname,$token:this.ptoken},(err:any,res:any)=>{
             if(res[0]){
-                this.remove_user();
-                accept({status:true,name:this.pname,token:this.ptoken})
+                
+                accept(this.remove_user(true));
             }else{
-               accept({status:false,name:this.pname,token:"Token not Found"})
+               accept(this.remove_user(false));
             }
              });
 
@@ -38,9 +38,11 @@ class User {
   
     }
 
-    private remove_user(){
+    private remove_user(token_found:boolean):new_status{
 
-        db.run("DELETE FROM `users` WHERE `name` = $name;",{$name:this.pname},(err:any,res:any)=>{
+        if(token_found){
+
+            db.run("DELETE FROM `users` WHERE `name` = $name;",{$name:this.pname},(err:any,res:any)=>{
             if(err){
                 console.log(err);
             }else{
@@ -56,6 +58,14 @@ class User {
             };
 
         })
+
+        return {status:true,secret_token:this.ptoken,name:this.pname}
+        }else{
+
+
+            return {status:false}
+
+        }
 
     }
 

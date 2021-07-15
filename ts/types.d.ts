@@ -5,7 +5,8 @@ export interface response {
 
 export interface new_status {
     status: boolean,
-    secret_token?: string
+    secret_token?: string,
+    name?:string
 
 }
 

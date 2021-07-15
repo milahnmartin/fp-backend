@@ -56,8 +56,6 @@ const generateToken = (): string => {
 
 
 
-
-
 function new_player(pname: string, pinfo: string): new_status {
     db.run("insert into `users`(name,info)values($name,$info)",
         { $name: pname, $info: pinfo },
@@ -109,7 +107,7 @@ app.get('/data/remove/:name', async (req: any, res: any) => {
         if (status.status) {
             res.status(200).json({ status: "Succesfull", name: status.name, token: status.token });
         } else {
-            res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token Doesn't Exist or is wrong" })
+            res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token is Either Wrong, or user doesnt exist",response:"deleted" })
         }
     }
 
