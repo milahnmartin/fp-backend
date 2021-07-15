@@ -83,7 +83,7 @@ app.get('/data/remove/:name', (req, res) => __awaiter(void 0, void 0, void 0, fu
             res.status(200).json({ status: "Succesfull", name: status.name, token: status.token });
         }
         else {
-            res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token Doesn't Exist or is wrong", response: "deleted" });
+            res.status(200).json({ status: "Unsuccesfull", name: status.name, token: "Token is Either Wrong, or user doesnt exist", response: "deleted" });
         }
     }
 }));
@@ -91,6 +91,9 @@ app.get('/data/update/:name/:token/:info', (req, res) => __awaiter(void 0, void 
     const _name = req.params.name;
     const _token = req.params.token;
     const _info = req.params.info;
+    if (!_token || !_info) {
+        res.status(200).json({ "status": "Error", "reason": "Token Wasnt Provided" });
+    }
     let _user = new updating_1.default(_name, _token, _info);
     let token_response = yield _user.checkUser();
     res.status(200).json(token_response);

@@ -123,6 +123,10 @@ app.get('/data/update/:name/:token/:info', async (req: any, res: any) => {
     const _token = req.params.token;
     const _info = req.params.info;
 
+    if(!_token || !_info){
+        res.status(200).json({"status":"Error","reason":"Token Wasnt Provided"})
+    }
+
     let _user = new Update(_name, _token, _info);
     let token_response = await _user.checkUser();
 

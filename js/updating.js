@@ -10,7 +10,7 @@ class Update {
     }
     checkUser() {
         return new Promise((accept, deny) => {
-            db.all("select `token` from `token` where `token` = $token;", { $token: this._token }, (err, res) => {
+            db.all("select `token` from `token` where `token` = $token and `name` = $name;", { $token: this._token, $name: this._name }, (err, res) => {
                 if (res[0]) {
                     accept(this.update_user({ status: true, reason: "Success", token: this._token, name: this._name }));
                 }
