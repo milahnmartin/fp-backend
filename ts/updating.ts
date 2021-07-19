@@ -1,4 +1,3 @@
-import { stat } from 'fs';
 import User from './removing';
 import { new_status, response, update_status } from './types';
 const sqlite3 = require('sqlite3');
