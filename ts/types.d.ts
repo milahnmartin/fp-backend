@@ -17,3 +17,8 @@ export interface update_status {
     token?: string,
     name: string
 }
+
+export enum gender {
+    W = 'W',
+    S = 'S'
+}
